@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="top-header">
+    Exam Hall Seating Arrangement System
+</div>
+
+<div class="main-container">
+
+    <div class="sidebar">
+        <h3>DASHBOARD</h3>
+        <ul>
+            <li><a href="{{ url_for('students_page') }}">👨‍🎓 Students</a></li>
+            <li><a href="{{ url_for('uploaded_batches') }}">📁 Uploaded Students</a></li>
+            
+            <li><a href="{{ url_for('halls_page') }}">🏫 Exam Halls</a></li>
+            
+            <li><a href="{{ url_for('hall_plan') }}">🪑 Hall Plan</a></li>
+            <li><a href="{{ url_for('logout') }}">🚪 Logout</a></li>
+        </ul>
+    </div>
+    
+    <div class="dashboard-content">
+        <h2>Exam Configuration</h2>
+    
+        <a href="{{ url_for('dashboard') }}" class="btn-back">← Back to Dashboard</a>
+    
+    
+        <form method="POST">
+
+            <div class="form-row">
+                <label>Semester :</label>
+                <select name="semester" required>
+
+                    <option value="6">6</option>
+                    <option value="4">4</option>
+                    <option value="2">2</option>
+                </select>
+
+                <label>Exam Date :</label>
+                <input type="date" name="exam_date" required>
+            </div>
+
+            <div class="form-row">
+                <label>Session :</label>
+                <select name="session" required>
+                    <option value="FN">FN</option>
+                    <option value="AN">AN</option>
+                </select>
+            </div>
+
+            <hr>
+
+            <h3>Departments Writing Exam</h3>
+
+            <div class="dept-grid">
+
+                <div>
+                    <label>CSE :</label>
+                    <input type="text" name="cse_subject" placeholder="Subject Code">
+                </div>
+
+                <div>
+                    <label>ECE :</label>
+                    <input type="text" name="ece_subject" placeholder="Subject Code">
+                </div>
+
+                <div>
+                    <label>IT :</label>
+                    <input type="text" name="it_subject" placeholder="Subject Code">
+                </div>
+
+                <div>
+                    <label>EEE :</label>
+                    <input type="text" name="eee_subject" placeholder="Subject Code">
+                </div>
+
+            </div>
+
+            <div class="btn-group">
+                <button type="reset">Reset</button>
+            
+            </div>
+        </form>
+        <h2>Select Hall</h2>
+    
+        <form action="/generate_all_seating" method="POST">
+            <button type="submit" class="generate-btn">
+                Generate Seating For All Halls
+            </button>
+        </form>
+    
+        {% for hall in halls %}
+    
+        <div class="hall-card">
+    
+            <p>Hall : {{ hall.hall_name }}</p>
+            <p>Capacity : {{ hall.capacity }}</p>
+    
+            <a href="{{ url_for('view_seating', hall_id=hall.id) }}">
+                <button class="generate-btn">
+                    View Seating
+                </button>
+            </a>
+    
+        </div>
+    
+        {% endfor %}
+    </div>
+
+
+</div>
+

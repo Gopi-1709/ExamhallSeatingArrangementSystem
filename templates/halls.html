@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Exam Halls</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+<body>
+
+<div class="main-container">
+
+    <div class="sidebar">
+        <h3>DASHBOARD</h3>
+        <ul>
+            <li><a href="{{ url_for('students_page') }}">👨‍🎓 Students</a></li>
+            <li><a href="{{ url_for('uploaded_batches') }}">📁 Uploaded Students</a></li>
+
+            <li><a href="{{ url_for('halls_page') }}">🏫 Exam Halls</a></li>
+            <li><a href="{{ url_for('hall_plan') }}">🪑 Hall Plan</a></li>
+            <li><a href="{{ url_for('logout') }}">🚪 Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="dashboard-content">
+        <h2>Hall Details</h2>
+
+        <a href="{{ url_for('dashboard') }}" class="btn-back">
+            ← Back to Dashboard
+        </a>
+        
+        <form method="POST">
+            <div class="form-row">
+                <label>Hall Name / Number</label>
+                <input type="text" name="hall_name" required>
+
+                <label>Number of Rows</label>
+                <input type="number" name="rows" required>
+
+                <label>Number of Columns</label>
+                <input type="number" name="columns" required>
+
+                <div class="button-group">
+                    <button type="reset">Reset</button>
+                    <button type="submit" class="save-btn">Save Hall</button>
+                </div>
+            </div>
+        </form>
+
+        <hr>
+
+        <h3>Existing Halls</h3>
+
+        <table class="hall-table">
+            <tr>
+                <th>Hall</th>
+                <th>Capacity</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+
+            {% for hall in halls %}
+            <tr>
+                <td>{{ hall.hall_name }}</td>
+                <td>{{ hall.capacity }}</td>
+
+                <td>
+                    {% if hall.status == "active" %}
+                        <span style="color:green;">Active</span>
+                    {% else %}
+                        <span style="color:red;">Disabled</span>
+                    {% endif %}
+                </td>
+
+                <td>
+                    {% if hall.status == "active" %}
+                        <a href="{{ url_for('toggle_hall', hall_id=hall.id) }}">Disable</a>
+                    {% else %}
+                        <a href="{{ url_for('toggle_hall', hall_id=hall.id) }}">Activate</a>
+                    {% endif %}
+                </td>
+                
+
+
+            </tr>
+            
+            {% endfor %}
+
+    
+
+        </table>
+
+    </div>
+
+</div>
+
+</body>
+</html> 

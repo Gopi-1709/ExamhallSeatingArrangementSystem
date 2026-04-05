@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Seating Output</title>
+</head>
+
+<body>
+
+<h2>Hall : {{ hall.hall_name }}</h2>
+
+<table border="1" cellpadding="10">
+
+{% for row in seating %}
+<tr>
+
+{% for seat in row %}
+<td>
+
+{% if seat %}
+{{ seat.register_number }} <br>
+{{ seat.department }}
+{% else %}
+Empty
+{% endif %}
+
+</td>
+{% endfor %}
+
+</tr>
+{% endfor %}
+
+</table>
+
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="top-header">
+    Exam Hall Seating Arrangement System
+</div>
+
+<div class="main-container">
+
+    <div class="sidebar">
+        <h3>DASHBOARD</h3>
+        <ul>
+            <li><a href="{{ url_for('students_page') }}">👨‍🎓 Students</a></li>
+            <li><a href="{{ url_for('uploaded_batches') }}">📁 Uploaded Students</a></li>
+
+            <li><a href="{{ url_for('halls_page') }}">🏫 Exam Halls</a></li>
+
+            <li><a href="{{ url_for('hall_plan') }}">🪑 Hall Plan</a></li>
+            <li><a href="{{ url_for('logout') }}">🚪 Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="dashboard-content">
+        <h2>Dashboard</h2>
+
+        <div class="stats-container">
+
+            <div class="stat-card students">
+                <h1>{{ total_students }}</h1>
+                <p>Total Students</p>
+            </div>
+
+            <div class="stat-card halls">
+                <h1>{{ total_halls }}</h1>
+                <p>Total Halls</p>
+            </div>
+
+            <div class="stat-card departments">
+                <h1>{{ total_departments }}</h1>
+                <p>Total Departments</p>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Uploaded Students</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="main-container">
+
+<div class="sidebar">
+    <h3>DASHBOARD</h3>
+    <ul>
+        <li><a href="{{ url_for('students_page') }}">👨‍🎓 Students</a></li>
+        <li><a href="{{ url_for('uploaded_batches') }}">📁 Uploaded Students</a></li>
+        <li><a href="{{ url_for('halls_page') }}">🏫 Exam Halls</a></li>
+        <li><a href="{{ url_for('hall_plan') }}">🪑 Hall Plan</a></li>
+        
+        <li><a href="{{ url_for('logout') }}">🚪 Logout</a></li>
+    </ul>
+</div>
+
+<div class="dashboard-content">
+
+<a href="{{ url_for('dashboard') }}" class="btn-back">
+← Back to Dashboard
+</a>
+
+<h2>Uploaded Student Files</h2>
+
+<table class="batch-table">
+<tr>
+    <th>Department</th>
+    <th>Semester</th>
+    <th>No of Students</th>
+    <th>Action</th>
+</tr>
+
+{% for batch in batches %}
+<tr>
+    <td>{{ batch.department }}</td>
+    <td>Semester {{ batch.semester }}</td>
+    <td>{{ batch.count }}</td>
+    <td>
+        <a href="{{ url_for('delete_batch', department=batch.department, semester=batch.semester) }}" class="delete-btn">
+            Delete
+        </a>
+    </td>
+</tr>
+{% endfor %}
+
+</table>
+
+</div>
+</div>
+
+</body>
+</html> 
