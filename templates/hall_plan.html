@@ -41,9 +41,13 @@
                 <label>Semester :</label>
                 <select name="semester" required>
 
-                    <option value="6">6</option>
-                    <option value="4">4</option>
+                    <option value="1">1</option>
                     <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
                 </select>
 
                 <label>Exam Date :</label>
@@ -58,9 +62,9 @@
                 </select>
             </div>
 
-            <hr>
+            
 
-            <h3>Departments Writing Exam</h3>
+            <h3 style="text-align: center;">Departments Writing Exam</h3>
 
             <div class="dept-grid">
 
@@ -86,18 +90,26 @@
 
             </div>
 
-            <div class="btn-group">
-                <button type="reset">Reset</button>
+            <div class="hall-btn-group">
+                <button type="reset" class="btn-blue">Reset</button>
             
             </div>
         </form>
-        <h2>Select Hall</h2>
-    
-        <form action="/generate_all_seating" method="POST">
-            <button type="submit" class="generate-btn">
-                Generate Seating For All Halls
-            </button>
-        </form>
+       
+        <div style="display: flex; align-items: center; justify-content: center; gap: 20px;">
+
+            <h2>Selected Hall</h2>
+                
+            <form action="/generate_all_seating" method="POST">
+                <button type="submit" class="generate-btn">
+                    Generate Seating
+                </button>
+            </form>
+        
+        </div>
+
+                    
+        
     
         <div class="hall-container">
 

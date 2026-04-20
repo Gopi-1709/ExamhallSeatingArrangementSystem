@@ -48,6 +48,32 @@
             text-align: center;
             vertical-align: middle;
         }
+        .table-container {
+            
+            padding: 10px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100px;
+            
+        }
+
+        th, td {
+            border: 1px solid black;
+            text-align: center;
+            padding: 12px;
+            height: 10px;
+        }
+
+        th {
+            font-weight: bold;
+        }
+
+        .total {
+            font-weight: bold;
+            text-align: center;
+        }
         @media print {
             body {
                 zoom: 90%;
@@ -92,6 +118,46 @@
 
     </table>
     
+
+
+    <div class="table-container">
+        <table>
+            <tr>
+                <th>Year</th>
+                <th>Department</th>
+                <th>Strength</th>
+                <th>Present</th>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td colspan="3" class="total">Total</td>
+                <td></td>
+            </tr>
+        </table>
+    </div>
+
+
 
 </div>
 
