@@ -1,35 +1,99 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Seating Output</title>
+    <title>Seating Output</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        .container {
+            width: 90%;
+            margin: auto;
+        }
+
+        /* LOGO */
+        .logo {
+            margin-top: 20px;
+        }
+
+        .logo img {
+            width: 500px;
+        }
+
+        /* HEADER DETAILS */
+        .exam-details {
+            margin: 15px 0;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .exam-details span {
+            margin: 0 20px;
+        }
+
+        /* TABLE */
+        table {
+            margin: auto;
+            border-collapse: collapse;
+        }
+
+        td {
+            border: 1px solid black;
+            padding: 12px;
+            width: 90px;
+            height: 40px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        @media print {
+            body {
+                zoom: 90%;
+            }
+        }
+
+    </style>
 </head>
 
 <body>
 
-<h2>Hall : {{ hall.hall_name }}</h2>
+<div class="container">
 
-<table border="1" cellpadding="10">
+    <!-- ✅ LOGO -->
+    <div class="logo">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="College Logo">
+    </div>
 
-{% for row in seating %}
-<tr>
+    <!-- ✅ HALL + DATE + SESSION -->
+    <div class="exam-details">
+        <span>Hall: {{ hall.hall_name }}</span>
+        
+    </div>
 
-{% for seat in row %}
-<td>
+    <!-- ✅ TABLE -->
+    <table>
 
-{% if seat %}
-{{ seat.register_number }} <br>
-{{ seat.department }}
-{% else %}
-Empty
-{% endif %}
+        {% for row in seating %}
+        <tr>
+            {% for seat in row %}
+            <td>
+                {% if seat %}
+                    {{ seat.register_number }} <br>
+                    {{ seat.department }}
+                {% else %}
+                    Empty
+                {% endif %}
+            </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
 
-</td>
-{% endfor %}
+    </table>
+    
 
-</tr>
-{% endfor %}
-
-</table>
+</div>
 
 </body>
 </html>

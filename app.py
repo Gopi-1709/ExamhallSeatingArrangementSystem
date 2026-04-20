@@ -25,7 +25,7 @@
 
 
 
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, flash, render_template, request, redirect, url_for, session
 
 
 from models import db
@@ -36,7 +36,7 @@ hall_allocations = {}
 
 app = Flask(__name__)
 app.secret_key = "exam_secret_key"
-
+app.secret_key = "your_secret_key"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -75,7 +75,7 @@ def dashboard():
         return redirect(url_for("login"))
 
     total_students = Student.query.count()
-    total_halls = Hall.query.count()
+    total_halls = Hall.query.filter_by(status="active").count()
     total_departments = db.session.query(Student.department).distinct().count()
 
     return render_template(
@@ -135,6 +135,8 @@ def upload_students():
 
     return redirect(url_for("students_page"))
 
+from sqlalchemy.exc import IntegrityError
+
 @app.route('/halls', methods=['GET', 'POST'])
 def halls_page():
     if "user" not in session:
@@ -146,16 +148,25 @@ def halls_page():
         columns = int(request.form['columns'])
 
         capacity = rows * columns
-
+        
+        
         new_hall = Hall(
             hall_name=hall_name,
             rows=rows,         
             columns=columns,
-            capacity=capacity
+            capacity=capacity,
+            status="active"
         )
+        try:
+            db.session.add(new_hall)
+            db.session.commit()
+            flash("✅ Hall added successfully!", "success")
+            
+        except IntegrityError:
+            db.session.rollback()
+            flash("⚠️ Hall already exists!", "error")
+        return redirect(url_for('halls_page'))  # 🔥 stay on same page
 
-        db.session.add(new_hall)
-        db.session.commit()
 
     halls = Hall.query.all()
 
@@ -203,8 +214,10 @@ def toggle_hall(hall_id):
         hall.status = "active"
 
     db.session.commit()
+
     return redirect(url_for('halls_page'))
 
+from flask import session
 
 @app.route('/hall_plan', methods=['GET','POST'])
 # @app.route("/hall_plan")
@@ -212,6 +225,10 @@ def hall_plan():
 
     if "user" not in session:
         return redirect(url_for("login"))
+    
+    if request.method == "POST":
+        session['exam_date'] = request.form.get('exam_date')
+        session['session'] = request.form.get('session')
 
     halls = Hall.query.filter_by(status="active").all()
 
@@ -275,16 +292,23 @@ def generate_all_seating():
     return redirect('/hall_plan')
 
 
+from flask import session
+
 @app.route('/view_seating/<int:hall_id>')
 def view_seating(hall_id):
 
     hall = Hall.query.get(hall_id)
     seating = hall_allocations.get(hall_id)
+    
+    exam_date = session.get('exam_date')
+    exam_session = session.get('session')
 
     return render_template(
         'seating_output.html',
         hall=hall,
-        seating=seating
+        seating=seating,
+        exam_date=exam_date,
+        session=exam_session
     )
 
 @app.route("/logout")

@@ -28,7 +28,11 @@
     <div class="dashboard-content">
         <h2>Exam Configuration</h2>
     
-        <a href="{{ url_for('dashboard') }}" class="btn-back">← Back to Dashboard</a>
+        <div class="back-container">
+            <a href="{{ url_for('dashboard') }}" class="btn-back">
+                ← Back to Dashboard
+            </a>
+        </div>
     
     
         <form method="POST">
@@ -95,22 +99,22 @@
             </button>
         </form>
     
-        {% for hall in halls %}
-    
-        <div class="hall-card">
-    
-            <p>Hall : {{ hall.hall_name }}</p>
-            <p>Capacity : {{ hall.capacity }}</p>
-    
-            <a href="{{ url_for('view_seating', hall_id=hall.id) }}">
-                <button class="generate-btn">
-                    View Seating
-                </button>
-            </a>
-    
+        <div class="hall-container">
+
+            {% for hall in halls %}
+            <div class="hall-card">
+
+                <p><strong>{{ hall.hall_name }}</strong></p>
+                <p>Capacity: {{ hall.capacity }}</p>
+
+                <a href="{{ url_for('view_seating', hall_id=hall.id) }}">
+                    <button class="view-btn">View Seating</button>
+                </a>
+
+            </div>
+            {% endfor %}
+
         </div>
-    
-        {% endfor %}
     </div>
 
 

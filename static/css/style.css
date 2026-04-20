@@ -88,14 +88,17 @@
 
 .main-container {
     display: flex;
+    min-height: 100vh;
 }
 
 .sidebar {
     width: 220px;
     background-color: #8d8d8d;
-    height: 100vh;
+    min-height: 100vh;
     padding: 30px 20px;
     color: white;
+    position: sticky;
+    top: 0;
 }
 
 .sidebar h3 {
@@ -186,15 +189,19 @@ select, input[type="file"] {
     margin-bottom: 15px;
 }
 
-
+.back-container {
+    width: 100%;
+    text-align: left;
+}
 .btn-back {
     display: inline-block;
-    margin-top: 15px;
-    margin-bottom: 20px;
+    width: fit-content;
+    margin: 15px 0 20px 0;
     padding: 8px 15px;
     background-color: #6f6f6f;
     color: white;
     text-decoration: none;
+    
     border-radius: 4px;
     font-size: 14px;
 }
@@ -202,6 +209,32 @@ select, input[type="file"] {
 .btn-back:hover {
     background-color: #555;
 }
+
+.hall-btn-group {
+    width: 100%;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.btn-blue {
+    background-color: #2d8cf0;
+    color: white;
+    padding: 8px 18px;
+    border: none;
+    border-radius: 6px;
+    margin: 5px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.btn-blue:hover {
+    background-color: #1c6ed5;
+}
+.btn-blue {
+    padding: 10px 25px;
+    font-size: 14px;
+}
+
 
 
 /* ================= UPLOADED STUDENTS PAGE ================= */
@@ -290,11 +323,53 @@ select, input[type="file"] {
 .generate-btn {
     background-color: #1e88e5;
     color: white;
+    margin-bottom: 15px;
     padding: 8px 15px;
+    border: none;
     border-radius: 5px;
+}
+.generate-btn:hover{
+    background-color: #1b5fad;
 }
 
 .btn-group {
     
     margin-top: 20px;
+}
+
+
+
+/* ---------------- */
+
+/* HALL GRID */
+.hall-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+/* EACH CARD */
+.hall-card {
+    width: 180px;
+    padding: 15px;
+    background: #f4f4f4;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* BUTTON */
+.view-btn {
+    margin-top: 10px;
+    padding: 8px 12px;
+    background-color: #2d89ef;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.view-btn:hover {
+    background-color: #1b5fad;
 }

@@ -6,7 +6,9 @@
 
 </head>
 <body>
-
+<div class="top-header">
+    Exam Hall Seating Arrangement System
+</div>
 <div class="main-container">
 
     <div class="sidebar">
@@ -20,13 +22,25 @@
             <li><a href="{{ url_for('logout') }}">🚪 Logout</a></li>
         </ul>
     </div>
-
+    
     <div class="dashboard-content">
-        <h2>Hall Details</h2>
 
-        <a href="{{ url_for('dashboard') }}" class="btn-back">
-            ← Back to Dashboard
-        </a>
+        <h2>Hall Details</h2>
+        
+        <div class="back-container">
+            <a href="{{ url_for('dashboard') }}" class="btn-back">
+                ← Back to Dashboard
+            </a>
+        </div>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <script>
+                    alert("{{ message }}");
+                </script>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
         
         <form method="POST">
             <div class="form-row">
@@ -39,15 +53,16 @@
                 <label>Number of Columns</label>
                 <input type="number" name="columns" required>
 
-                <div class="button-group">
-                    <button type="reset">Reset</button>
-                    <button type="submit" class="save-btn">Save Hall</button>
-                </div>
+                
+            </div>
+            <div class="hall-btn-group">
+                <button type="reset" class="btn-blue">Reset</button>
+                <button type="submit" class="btn-blue">Save Hall</button>
             </div>
         </form>
 
         <hr>
-
+        <br>
         <h3>Existing Halls</h3>
 
         <table class="hall-table">
