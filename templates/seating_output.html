@@ -95,6 +95,10 @@
     <!-- ✅ HALL + DATE + SESSION -->
     <div class="exam-details">
         <span>Hall: {{ hall.hall_name }}</span>
+        <span>Date: {{ exam_date.split('-')[2] }}-
+                {{ exam_date.split('-')[1] }}-
+                {{ exam_date.split('-')[0] }}</span>
+        <span>Session: {{ exam_session }}</span>
         
     </div>
 
@@ -106,8 +110,8 @@
             {% for seat in row %}
             <td>
                 {% if seat %}
-                    {{ seat.register_number }} <br>
-                    {{ seat.department }}
+                    {{ seat[0].register_number }} <br>
+                    {{ seat[1] }}
                 {% else %}
                     Empty
                 {% endif %}

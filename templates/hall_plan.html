@@ -35,20 +35,22 @@
         </div>
     
     
-        <form method="POST">
+        <form action="/generate_all_seating" method="POST">
 
             <div class="form-row">
-                <label>Semester :</label>
-                <select name="semester" required>
+                <label>Year :</label>
 
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                </select>
+                <label>
+                    <input type="checkbox" name="year" value="2"> 2nd Year
+                </label>
+
+                <label>
+                    <input type="checkbox" name="year" value="3"> 3rd Year
+                </label>
+
+                <label>
+                    <input type="checkbox" name="year" value="4"> 4th Year
+                </label>
 
                 <label>Exam Date :</label>
                 <input type="date" name="exam_date" required>
@@ -69,23 +71,63 @@
             <div class="dept-grid">
 
                 <div>
-                    <label>CSE :</label>
-                    <input type="text" name="cse_subject" placeholder="Subject Code">
+                    <label>CSE 2nd Year:</label>
+                    <input type="text" name="cse_2_subject" placeholder="Subject Code">
                 </div>
 
                 <div>
-                    <label>ECE :</label>
-                    <input type="text" name="ece_subject" placeholder="Subject Code">
+                    <label>CSE 3rd Year:</label>
+                    <input type="text" name="cse_3_subject" placeholder="Subject Code">
                 </div>
 
                 <div>
-                    <label>IT :</label>
-                    <input type="text" name="it_subject" placeholder="Subject Code">
+                    <label>CSE 4th Year:</label>
+                    <input type="text" name="cse_4_subject" placeholder="Subject Code">
                 </div>
 
                 <div>
-                    <label>EEE :</label>
-                    <input type="text" name="eee_subject" placeholder="Subject Code">
+                    <label>ECE 2nd Year:</label>
+                    <input type="text" name="ece_2_subject" placeholder="Subject Code">
+                </div>
+
+                <div>
+                    <label>ECE 3rd Year:</label>
+                    <input type="text" name="ece_3_subject" placeholder="Subject Code">
+                </div>
+
+                <div>
+                    <label>ECE 4th Year:</label>
+                    <input type="text" name="ece_4_subject" placeholder="Subject Code">
+                </div>
+
+                <div>
+                    <label>IT 2nd Year:</label>
+                    <input type="text" name="it_2_subject" placeholder="Subject Code">
+                </div>
+
+                <div>
+                    <label>IT 3rd Year:</label>
+                    <input type="text" name="it_3_subject" placeholder="Subject Code">
+                </div>
+
+                <div>
+                    <label>IT 4th Year:</label>
+                    <input type="text" name="it_4_subject" placeholder="Subject Code">
+                </div>
+
+                <div>
+                    <label>EEE 2nd Year:</label>
+                    <input type="text" name="eee_2_subject" placeholder="Subject Code">
+                </div>
+
+                <div>
+                    <label>EEE 3rd Year:</label>
+                    <input type="text" name="eee_3_subject" placeholder="Subject Code">
+                </div>
+
+                <div>
+                    <label>EEE 4th Year:</label>
+                    <input type="text" name="eee_4_subject" placeholder="Subject Code">
                 </div>
 
             </div>
@@ -93,20 +135,16 @@
             <div class="hall-btn-group">
                 <button type="reset" class="btn-blue">Reset</button>
             
-            </div>
-        </form>
-       
-        <div style="display: flex; align-items: center; justify-content: center; gap: 20px;">
-
-            <h2>Selected Hall</h2>
-                
-            <form action="/generate_all_seating" method="POST">
                 <button type="submit" class="generate-btn">
                     Generate Seating
                 </button>
-            </form>
+            </div>
         
-        </div>
+                
+            
+        </form>
+        
+        
 
                     
         
@@ -122,9 +160,17 @@
                 <a href="{{ url_for('view_seating', hall_id=hall.id) }}">
                     <button class="view-btn">View Seating</button>
                 </a>
-
+                
             </div>
             {% endfor %}
+            <div class="print-btn-container">
+                <a href="/print_all" target="_blank">
+                    <button class="generate-btn">Print</button>
+                </a>
+            </div>
+                        
+            
+            
 
         </div>
     </div>

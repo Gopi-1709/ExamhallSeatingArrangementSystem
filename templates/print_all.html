@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Print All Halls</title>
+
+<style>
+body {
+    font-family: Arial;
+    text-align: center;
+}
+
+.hall-section {
+    margin-bottom: 50px;
+}
+
+.logo {
+    width: 600px;
+    height: 200px;
+    display: block;
+    margin: 0 auto 10px auto;
+}
+
+.header-row {
+    display: flex;
+    justify-content: space-around;
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+table {
+    margin: auto;
+    border-collapse: collapse;
+}
+
+td {
+    border: 1px solid black;
+    padding: 10px;
+    width: 100px;
+}
+
+
+.summary-table {
+    margin-top: 20px;
+    border-collapse: collapse;
+    width: 30%;
+    
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.summary-table th, 
+.summary-table td {
+    border: 1px solid black;
+    padding: 8px;
+    width: 50px;
+    height: 20px;
+    text-align: center;
+}
+
+
+
+/* PAGE BREAK FOR PRINT */
+.page-break {
+    page-break-after: always;
+}
+@media print {
+    .page-break {
+        page-break-after: always;
+    }
+}
+</style>
+
+</head>
+
+<body onload="window.print()">
+
+{% for item in all_seating %}
+
+<div class="hall-section">
+
+    <div class="print-header">
+
+        <img src="{{ url_for('static', filename='images/logo.png') }}" class="logo">
+
+        <div class="header-row">
+            <span><b>Hall: {{ item.hall.hall_name }}</b></span>
+            <span><b>Date: {{ exam_date }}</b></span>
+            <span><b>Session: {{ exam_session }}</b></span>
+        </div>
+
+    </div>
+
+    <table>
+        {% for row in item.seating %}
+        <tr>
+            {% for seat in row %}
+            <td>
+                {% if seat %}
+                    {{ seat[0].register_number }} <br>
+                    {{ seat[1] }}
+                {% else %}
+                    Empty
+                {% endif %}
+            </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+    <table class="summary-table">
+
+        <tr>
+            <th>Year</th>
+            <th>Department</th>
+            <th>Strength</th>
+            <th>Present</th>
+            <th>Absent</th>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+
+        <tr>
+            <td colspan="2"><b>Total</b></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+
+    </table>
+
+</div>
+
+
+<div class="page-break"></div>
+
+{% endfor %}
+
+</body>
+</html>

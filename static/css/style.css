@@ -329,7 +329,7 @@ select, input[type="file"] {
     border-radius: 5px;
 }
 .generate-btn:hover{
-    background-color: #1b5fad;
+    background-color: #0eac38;
 }
 
 .btn-group {
@@ -372,4 +372,26 @@ select, input[type="file"] {
 
 .view-btn:hover {
     background-color: #1b5fad;
+}
+
+
+.print-btn-container {
+    text-align: center;
+    margin: 30px 0;
+    width: 100%;
+    
+}
+
+.print-btn {
+    padding: 12px 20px;
+    font-size: 16px;
+    background-color: #1ee553;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.print-btn:hover {
+    background-color: #0eac38;
 }

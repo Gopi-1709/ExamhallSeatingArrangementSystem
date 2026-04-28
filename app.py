@@ -1,32 +1,6 @@
-# from flask import Flask
-# from flask import render_template
-# from models import db
-
-# app = Flask(__name__)
-
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-# db.init_app(app)
-
-# # Import models AFTER db init
-# from models.student import Student
-# from models.hall import Hall
-
-# @app.route("/")
-# def home():
-#     return render_template("login.html")
-
-
-# if __name__ == "__main__":
-#     with app.app_context():
-#         db.create_all()
-#     app.run(debug=True)
-
-
 
 from flask import Flask, flash, render_template, request, redirect, url_for, session
-
+from reportlab.platypus import Image
 
 from models import db
 from seating_algorithm import fill_seats_zigzag
@@ -100,7 +74,7 @@ def upload_students():
         return redirect(url_for("login"))
 
     department = request.form["department"]
-    semester = request.form["semester"]
+    year = request.form["year"]
     file = request.files["file"]
 
     if file:
@@ -121,7 +95,7 @@ def upload_students():
                     register_number=reg_no,
                     name=name,
                     department=department,
-                    semester=int(semester)
+                    year=int(year)
                 )
 
                 db.session.add(student)
@@ -181,23 +155,23 @@ def uploaded_batches():
 
     batches = db.session.query(
         Student.department,
-        Student.semester,
+        Student.year,
         db.func.count(Student.id).label("count")
     ).group_by(
         Student.department,
-        Student.semester
+        Student.year,
     ).all()
 
     return render_template("uploaded_batches.html", batches=batches)
 
-@app.route("/delete_batch/<department>/<int:semester>")
-def delete_batch(department, semester):
+@app.route("/delete_batch/<department>/<int:year>")
+def delete_batch(department, year):
     if "user" not in session:
         return redirect(url_for("login"))
 
     Student.query.filter_by(
         department=department,
-        semester=semester
+        year=year
     ).delete()
 
     db.session.commit()
@@ -239,9 +213,16 @@ def generate_all_seating():
     
     global hall_allocations
     hall_allocations = {}
+    
+    session['exam_date'] = request.form.get('exam_date')
+    session['exam_session'] = request.form.get('session')
 
-    # halls = Hall.query.all()
-    halls = Hall.query.filter_by(status="active").all()
+    years = request.form.getlist("year")
+
+    # convert to int
+    years = [int(y) for y in years]
+    
+    halls = Hall.query.all()
 
     # Get students department wise
     cse_students = Student.query.filter_by(department="CSE").all()
@@ -249,23 +230,48 @@ def generate_all_seating():
     it_students  = Student.query.filter_by(department="IT").all()
     eee_students = Student.query.filter_by(department="EEE").all()
 
-    dept_students = {
-        "CSE": cse_students.copy(),
-        "ECE": ece_students.copy(),
-        "IT": it_students.copy(),
-        "EEE": eee_students.copy()
-    }
+    
+    dept_students = {}
+    
+    
 
+    for dept in ["CSE", "ECE", "IT", "EEE"]:
+        for y in years:
+
+            students = Student.query.filter_by(
+                department=dept,
+                year=y
+            ).all()
+
+            if students:
+                dept_students[f"{dept}_{y}"] = students.copy()
+    
+    
+    dept_subject = {}
+
+    for dept in ["CSE", "ECE", "IT", "EEE"]:
+        for y in years:
+            key = f"{dept}_{y}"
+            dept_subject[key] = request.form.get(f"{dept.lower()}_{y}_subject")
+
+    
     for hall in halls:
 
         rows = hall.rows
         cols = hall.columns
-        capacity = rows * cols
 
         seating = [[None for _ in range(cols)] for _ in range(rows)]
 
-        dept_order = ["CSE", "ECE", "IT", "EEE"]
-        dept_index = 0
+
+        # ✅ Step 1: pick FIRST 2 departments
+        available = [d for d in dept_students if dept_students[d]]
+
+        if len(available) < 2:
+            break
+
+        active_depts = [available[0], available[1]]
+
+        toggle = 0
 
         for i in range(rows):
 
@@ -276,19 +282,104 @@ def generate_all_seating():
 
             for j in col_range:
 
-                for _ in range(len(dept_order)):
+                placed = False
 
-                    dept = dept_order[dept_index]
-                    dept_index = (dept_index + 1) % len(dept_order)
+                # 🔥 Update active departments dynamically
+                active_depts = [d for d in active_depts if dept_students[d]]
+                only_one = len(available) == 1
+                if only_one:
 
-                    if dept_students[dept]:
+                    dept = available[0]
 
-                        student = dept_students[dept].pop(0)
-                        seating[i][j] = student
-                        break
+                    # 🔥 Alternate seat logic
+                    if (i + j) % 2 == 0:
+                        if dept_students[dept]:
+                            student = dept_students[dept].pop(0)
+                            seating[i][j] = (student, dept)
+                        else:
+                            seating[i][j] = None
+                    else:
+                        seating[i][j] = None
 
+                    continue
+
+                # 🔥 If one dept finished → ADD NEW dept
+                if len(active_depts) < 2:
+                    for d in dept_students:
+                        if d not in active_depts and dept_students[d]:
+                            active_depts.append(d)
+                            if len(active_depts) >= 2:
+                                break
+
+                # 🔥 Try adding 3rd dept ONLY if needed
+                if len(active_depts) == 2:
+                    for d in dept_students:
+                        if d not in active_depts and dept_students[d]:
+                            active_depts.append(d)
+                            break
+
+                # 🔁 Try placement with rules
+                for _ in range(len(active_depts)):
+
+                    dept = active_depts[toggle % len(active_depts)]
+                    toggle += 1
+
+                    if not dept_students[dept]:
+                        continue
+
+                    current_subject = dept_subject.get(dept)
+
+                    # LEFT CHECK
+                    left = seating[i][j-1] if j > 0 else None
+                    if left:
+                        if left[1] == dept:
+                            continue
+                        if dept_subject.get(left[1]) == current_subject:
+                            continue
+
+                    # TOP CHECK
+                    top = seating[i-1][j] if i > 0 else None
+                    if top:
+                        if top[1] == dept:
+                            continue
+                        if dept_subject.get(top[1]) == current_subject:
+                            continue
+
+                    # ✅ PLACE
+                    student = dept_students[dept].pop(0)
+                    seating[i][j] = (student, dept)
+                    placed = True
+                    break
+
+                # 🔥 FINAL CONTROLLED FALLBACK
+                if not placed:
+
+                    remaining = [d for d in dept_students if dept_students[d]]
+
+                    # ✅ If multiple depts → TRY OTHER dept (not same as left/top)
+                    if len(remaining) > 1:
+                        for dept in remaining:
+
+                            left = seating[i][j-1] if j > 0 else None
+                            top = seating[i-1][j] if i > 0 else None
+
+                            if left and left[1] == dept:
+                                continue
+                            if top and top[1] == dept:
+                                continue
+
+                            student = dept_students[dept].pop(0)
+                            seating[i][j] = (student, dept)
+                            placed = True
+                            break
+
+                    
+        
+        
         hall_allocations[hall.id] = seating
-
+        
+        
+    
     return redirect('/hall_plan')
 
 
@@ -301,15 +392,59 @@ def view_seating(hall_id):
     seating = hall_allocations.get(hall_id)
     
     exam_date = session.get('exam_date')
-    exam_session = session.get('session')
+    exam_session = session.get('exam_session')
 
     return render_template(
         'seating_output.html',
         hall=hall,
         seating=seating,
-        exam_date=exam_date,
-        session=exam_session
+        exam_date = exam_date,
+        exam_session = exam_session
     )
+
+@app.route('/print_all')
+def print_all():
+
+    halls = Hall.query.filter_by(status="active").all()
+    exam_date = session.get('exam_date')
+    exam_session = session.get('exam_session')
+    
+    all_seating = []
+
+    for hall in halls:
+        seating = hall_allocations.get(hall.id)
+
+        # ✅ Skip if no seating generated
+        if not seating:
+            continue
+
+        # ✅ Check if at least one student exists
+        has_student = any(
+            seat is not None
+            for row in seating
+            for seat in row
+        )
+
+        if not has_student:
+            continue
+
+        all_seating.append({
+            "hall": hall,
+            "seating": seating
+        })
+
+    return render_template(
+        "print_all.html",
+        all_seating=all_seating,
+        exam_date=exam_date,
+        exam_session=exam_session
+    )
+    
+
+
+
+
+
 
 @app.route("/logout")
 def logout():
