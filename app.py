@@ -205,8 +205,15 @@ def hall_plan():
         session['session'] = request.form.get('session')
 
     halls = Hall.query.filter_by(status="active").all()
+    
+    
+    return render_template(
+        "hall_plan.html",
+        halls=halls,
+        hall_allocations=hall_allocations
+    )
 
-    return render_template("hall_plan.html", halls=halls)
+    
 
 @app.route('/generate_all_seating', methods=['POST'])
 def generate_all_seating():

@@ -137,17 +137,27 @@
     
         <div class="hall-container">
 
+            {% if not hall_allocations %}
+                <p>No seating generated yet.</p>
+            {% endif %}
+
             {% for hall in halls %}
-            <div class="hall-card">
 
-                <p><strong>{{ hall.hall_name }}</strong></p>
-                <p>Capacity: {{ hall.capacity }}</p>
+                {% set seating = hall_allocations.get(hall.id) %}
 
-                <a href="{{ url_for('view_seating', hall_id=hall.id) }}">
-                    <button class="view-btn">View Seating</button>
-                </a>
-                
-            </div>
+                {% if seating %}
+                <div class="hall-card">
+
+                    <p><strong>{{ hall.hall_name }}</strong></p>
+                    <p>Capacity: {{ hall.capacity }}</p>
+
+                    <a href="{{ url_for('view_seating', hall_id=hall.id) }}">
+                        <button class="view-btn">View Seating</button>
+                    </a>
+
+                </div>
+                {% endif %}
+
             {% endfor %}
             <div class="print-btn-container">
                 <a href="/print_all" target="_blank">
