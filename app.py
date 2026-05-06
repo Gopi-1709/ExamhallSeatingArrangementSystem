@@ -286,10 +286,14 @@ def generate_all_seating():
 
                 # 🔥 Update active departments dynamically
                 active_depts = [d for d in active_depts if dept_students[d]]
-                only_one = len(available) == 1
+                # only_one = len(available) == 1
+                remaining = [d for d in dept_students if dept_students[d]]
+                only_one = len(remaining) == 1
+                
                 if only_one:
 
-                    dept = available[0]
+                    # dept = available[0]
+                    dept = remaining[0]
 
                     # 🔥 Alternate seat logic
                     if (i + j) % 2 == 0:

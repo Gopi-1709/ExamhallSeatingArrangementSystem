@@ -26,20 +26,20 @@
     </div>
     
     <div class="dashboard-content">
-        <h2>Exam Configuration</h2>
-    
+        
         <div class="back-container">
             <a href="{{ url_for('dashboard') }}" class="btn-back">
                 ← Back to Dashboard
             </a>
         </div>
-    
+        
+        <h2>Exam Configuration</h2>
     
         <form action="/generate_all_seating" method="POST">
 
             <div class="form-row">
                 <label>Year :</label>
-
+                
                 <label>
                     <input type="checkbox" name="year" value="2"> 2nd Year
                 </label>
@@ -52,16 +52,16 @@
                     <input type="checkbox" name="year" value="4"> 4th Year
                 </label>
 
-                <label>Exam Date :</label>
-                <input type="date" name="exam_date" required>
             </div>
-
+            
             <div class="form-row">
                 <label>Session :</label>
                 <select name="session" required>
                     <option value="FN">FN</option>
                     <option value="AN">AN</option>
                 </select>
+                <label>Exam Date :</label>
+                <input type="date" name="exam_date" required>
             </div>
 
             
@@ -70,64 +70,50 @@
 
             <div class="dept-grid">
 
-                <div>
-                    <label>CSE 2nd Year:</label>
-                    <input type="text" name="cse_2_subject" placeholder="Subject Code">
-                </div>
+                <div class="dept-grid">
 
-                <div>
-                    <label>CSE 3rd Year:</label>
-                    <input type="text" name="cse_3_subject" placeholder="Subject Code">
-                </div>
+                    <!-- LEFT SIDE -->
+                    <div class="dept-col">
+                        <label>CSE 2nd Year:</label>
+                        <input type="text" name="cse_2_subject">
 
-                <div>
-                    <label>CSE 4th Year:</label>
-                    <input type="text" name="cse_4_subject" placeholder="Subject Code">
-                </div>
+                        <label>CSE 3rd Year:</label>
+                        <input type="text" name="cse_3_subject">
 
-                <div>
-                    <label>ECE 2nd Year:</label>
-                    <input type="text" name="ece_2_subject" placeholder="Subject Code">
-                </div>
+                        <label>CSE 4th Year:</label>
+                        <input type="text" name="cse_4_subject">
 
-                <div>
-                    <label>ECE 3rd Year:</label>
-                    <input type="text" name="ece_3_subject" placeholder="Subject Code">
-                </div>
+                        <label>IT 2nd Year:</label>
+                        <input type="text" name="it_2_subject">
 
-                <div>
-                    <label>ECE 4th Year:</label>
-                    <input type="text" name="ece_4_subject" placeholder="Subject Code">
-                </div>
+                        <label>IT 3rd Year:</label>
+                        <input type="text" name="it_3_subject">
 
-                <div>
-                    <label>IT 2nd Year:</label>
-                    <input type="text" name="it_2_subject" placeholder="Subject Code">
-                </div>
+                        <label>IT 4th Year:</label>
+                        <input type="text" name="it_4_subject">
+                    </div>
 
-                <div>
-                    <label>IT 3rd Year:</label>
-                    <input type="text" name="it_3_subject" placeholder="Subject Code">
-                </div>
+                    <!-- RIGHT SIDE -->
+                    <div class="dept-col">
+                        <label>ECE 2nd Year:</label>
+                        <input type="text" name="ece_2_subject">
 
-                <div>
-                    <label>IT 4th Year:</label>
-                    <input type="text" name="it_4_subject" placeholder="Subject Code">
-                </div>
+                        <label>ECE 3rd Year:</label>
+                        <input type="text" name="ece_3_subject">
 
-                <div>
-                    <label>EEE 2nd Year:</label>
-                    <input type="text" name="eee_2_subject" placeholder="Subject Code">
-                </div>
+                        <label>ECE 4th Year:</label>
+                        <input type="text" name="ece_4_subject">
 
-                <div>
-                    <label>EEE 3rd Year:</label>
-                    <input type="text" name="eee_3_subject" placeholder="Subject Code">
-                </div>
+                        <label>EEE 2nd Year:</label>
+                        <input type="text" name="eee_2_subject">
 
-                <div>
-                    <label>EEE 4th Year:</label>
-                    <input type="text" name="eee_4_subject" placeholder="Subject Code">
+                        <label>EEE 3rd Year:</label>
+                        <input type="text" name="eee_3_subject">
+
+                        <label>EEE 4th Year:</label>
+                        <input type="text" name="eee_4_subject">
+                    </div>
+
                 </div>
 
             </div>
